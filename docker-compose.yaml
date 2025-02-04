@@ -1,0 +1,37 @@
+version: '3.9'
+services:
+  s_mysql:
+    image: mariadb:${version_m}
+    container_name: s_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${contra_root}
+      MYSQL_DATABASE: ${database}
+      MYSQL_USER: ${usuario}
+      MYSQL_PASSWORD: ${contra}
+    ports:
+      - ${puerto_bd}:3306
+    networks:
+      - red_biblioteca
+
+  app:
+    container_name: biblioteca
+    restart: always
+    image: raulhr16/biblio:${version_app}
+    depends_on:
+      - s_mysql
+    environment:
+      MYSQL_DATABASE: ${database}
+      MYSQL_USER: ${usuario}
+      MYSQL_PASSWORD: ${contra}
+      MYSQL_ROOT_PASSWORD: ${contra_root}
+      MYSQL_HOST: s_mysql
+      BASE_URL: ${url}
+    networks:
+      - red_biblioteca
+    ports:
+      - ${puerto_app}:80
+
+networks:
+  red_biblioteca:
+    driver: bridge
