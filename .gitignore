@@ -1,1 +1,4 @@
-desarrollo.env
+.env
+app
+Dockerfile
+docker-entrypoint.sh
